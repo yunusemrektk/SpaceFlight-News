@@ -4,10 +4,9 @@ import androidx.activity.compose.BackHandler
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.study.main.MainScreen
+import com.study.main.MainRoute
 
 const val MAIN_ROUTE = "main_screen_route"
-
 
 fun NavController.navigateToMain(){
     this.navigate(route = MAIN_ROUTE)
@@ -15,13 +14,15 @@ fun NavController.navigateToMain(){
 
 fun NavGraphBuilder.mainScreen(
     onBackClick: () -> Unit,
-    onDetailsClick : () -> Unit
+    onNavigateToSummaryScreen: () -> Unit,
+    onNavigateToFavorites: () -> Unit
 ) {
     composable(route = MAIN_ROUTE) {
         BackHandler (true) {}
-        MainScreen(
+        MainRoute(
             onBackClick = onBackClick,
-            onDetailClick = onDetailsClick
+            onNavigateToSummaryScreen = onNavigateToSummaryScreen,
+            onNavigateToFavorites = onNavigateToFavorites
         )
 
     }

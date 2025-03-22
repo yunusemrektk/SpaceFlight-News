@@ -75,6 +75,8 @@ dependencies {
     //Feature Module
     implementation(project(":feature:main"))
     implementation(project(":feature:detail"))
+    implementation(project(":feature:summary"))
+    implementation(project(":feature:favorite"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

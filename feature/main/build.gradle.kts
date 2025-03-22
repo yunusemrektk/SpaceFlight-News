@@ -50,7 +50,10 @@ dependencies {
     //Dependency Injection
     // Hilt
     implementation("com.google.dagger:hilt-android:2.48.1")
+    debugImplementation(libs.ui.tooling)
     kapt("com.google.dagger:hilt-compiler:2.48.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation("androidx.navigation:navigation-compose:2.7.6")
 
     // For instrumented tests
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.48.1")
@@ -59,6 +62,11 @@ dependencies {
     // For local unit tests
     testImplementation("com.google.dagger:hilt-android-testing:2.48.1")
     kaptTest("com.google.dagger:hilt-compiler:2.48.1")
+
+
+    //Module
+    implementation(project(":common:ui"))
+    implementation(project(":feature:detail"))
 
     //Navigtaion
     implementation(libs.androidx.navigation.compose)
