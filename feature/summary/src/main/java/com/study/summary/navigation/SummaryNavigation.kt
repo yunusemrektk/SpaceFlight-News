@@ -21,7 +21,6 @@ fun NavGraphBuilder.summaryScreen(
         BackHandler (true) { onBackClick() }
         SummaryRoute(
             onNavigateToDetailScreen
-
         )
 
     }

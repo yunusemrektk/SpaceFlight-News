@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.androidx.navigation.ui)
 
     //Feature Module
+    implementation(project(":common:ui"))
     implementation(project(":feature:main"))
     implementation(project(":feature:detail"))
     implementation(project(":feature:summary"))

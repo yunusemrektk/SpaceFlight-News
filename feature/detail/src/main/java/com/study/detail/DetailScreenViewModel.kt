@@ -23,9 +23,6 @@ class DetailScreenViewModel @Inject constructor(
     fun initValues(){
         viewModelScope.launch {
             detailScreenUiState.value = DetailScreenUIState.Detail(provideNewsDetail(), errorMessage = "")
-            delay(2000)
-            detailScreenUiState.value = DetailScreenUIState.Detail(provideNewsDetail(), errorMessage = "asdasda")
-            delay(2000)
         }
     }
     private fun provideNewsDetail(): NewsDetail {

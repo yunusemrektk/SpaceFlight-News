@@ -9,17 +9,16 @@ import androidx.navigation.compose.NavHost
 import com.study.detail.navigation.detailScreen
 import com.study.detail.navigation.navigateToDetail
 import com.study.favorite.navigation.favoriteScreen
-import com.study.favorite.navigation.navigateToFavorite
 import com.study.main.navigation.*
 import com.study.summary.navigation.navigateToSummary
 import com.study.summary.navigation.summaryScreen
 
 @Composable
-fun AppNavigator(
+fun SpaceNavHost(
     modifier: Modifier = Modifier,
     navHostController: NavHostController
 ) {
-    Navigator(
+    NavHost(
         modifier = modifier,
         navHostController = navHostController,
         startDestination = MAIN_ROUTE
@@ -28,28 +27,26 @@ fun AppNavigator(
             onBackClick = {},
             onNavigateToSummaryScreen = {
                 navHostController.navigateToSummary()
-            },
-            onNavigateToFavorites = {
-                navHostController.navigateToFavorite()
             }
         )
-
-        favoriteScreen (
-            onBackClick = {navHostController.popBackStack()}
+        favoriteScreen(
+            onBackClick = { navHostController.popBackStack() }
         )
         detailScreen(
             onBackClick = { navHostController.popBackStack() }
         )
         summaryScreen(
             onBackClick = { navHostController.popBackStack() },
-            onNavigateToDetailScreen = {navHostController.navigateToDetail()}
+            onNavigateToDetailScreen = {
+                navHostController.navigateToDetail()
+            }
         )
     }
 
 }
 
 @Composable
-fun Navigator(
+fun NavHost(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
     startDestination: String,
