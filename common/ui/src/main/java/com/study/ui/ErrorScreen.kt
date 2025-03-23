@@ -6,18 +6,13 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -25,10 +20,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,12 +38,11 @@ import kotlinx.coroutines.delay
 @Composable
 fun ErrorScreen(
     modifier: Modifier = Modifier,
-    errorMessage : String = "Oops!! Something went wrong"
+    errorMessage : String = "Oops!! Something went wrong",
+    onDismiss: () -> Unit = {},
 ) {
 
-    //Dismiss after 2 seconds
     val isVisible = remember { mutableStateOf(true) }
-
 
     AnimatedVisibility(
         visible = isVisible.value,
@@ -75,7 +67,7 @@ fun ErrorScreen(
             ) {
                 Icon(
                     modifier = modifier
-                        .size(30.dp)
+                        .size(40.dp)
                         .weight(0.2f),
                     imageVector = Icons.Default.Close,
                     contentDescription = "",
@@ -83,7 +75,8 @@ fun ErrorScreen(
                 )
 
                 Text(
-                    modifier = modifier.weight(0.8f),
+                    modifier = modifier.weight(0.8f)
+                        .padding(end = 15.dp),
                     text = errorMessage,
                     style = TextStyle(
                         fontSize = 16.sp,
@@ -99,9 +92,11 @@ fun ErrorScreen(
         }
     }
 
+    //Dismiss after 2 seconds
     LaunchedEffect(key1 = Unit) {
         delay(2000)
         isVisible.value = false
+        onDismiss()
     }
 
 }

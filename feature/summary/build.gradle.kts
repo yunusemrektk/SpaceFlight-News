@@ -44,7 +44,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.material3)
 
     //Dependency Injection
     // Hilt
@@ -64,8 +63,11 @@ dependencies {
 
 
     //Module
-    implementation(project(":common:ui"))
     implementation(project(":feature:detail"))
+    implementation(project(":common:ui"))
+    implementation(project(":core:data"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:datastore"))
 
     //Navigtaion
     implementation(libs.androidx.navigation.compose)

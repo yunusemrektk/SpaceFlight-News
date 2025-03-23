@@ -8,6 +8,5 @@ import dagger.hilt.android.HiltAndroidApp
 class SpaceFlightApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        Log.e("MYTEST","APP ON CREATE")
     }
 }

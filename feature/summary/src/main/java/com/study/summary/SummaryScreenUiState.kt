@@ -1,15 +1,8 @@
 package com.study.summary
 
-data class SummaryScreenUiState(
-    val newsSummary: List<NewsSummary> = emptyList(),
-    val errorMessage: String = "",
-    val isLoading :Boolean = false
-    )
+import com.study.data.model.NewsSummary
 
-data class NewsSummary(
-    val title: String = "",
-    val summary: String = "",
-    val date: String = "",
-
-)
-
+sealed class SummaryScreenUiState {
+    data class Summary(val newsSummary: List<NewsSummary> = emptyList(), val errorMessage: String = "") : SummaryScreenUiState()
+    data object Loading : SummaryScreenUiState()
+}

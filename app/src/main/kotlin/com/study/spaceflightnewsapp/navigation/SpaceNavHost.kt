@@ -3,13 +3,13 @@ package com.study.spaceflightnewsapp.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
-
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.study.detail.navigation.detailScreen
 import com.study.detail.navigation.navigateToDetail
 import com.study.favorite.navigation.favoriteScreen
-import com.study.main.navigation.*
+import com.study.main.navigation.MAIN_ROUTE
+import com.study.main.navigation.mainScreen
 import com.study.summary.navigation.navigateToSummary
 import com.study.summary.navigation.summaryScreen
 
@@ -37,8 +37,8 @@ fun SpaceNavHost(
         )
         summaryScreen(
             onBackClick = { navHostController.popBackStack() },
-            onNavigateToDetailScreen = {
-                navHostController.navigateToDetail()
+            onNavigateToDetailScreen = { id->
+                navHostController.navigateToDetail(id)
             }
         )
     }

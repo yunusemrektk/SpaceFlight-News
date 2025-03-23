@@ -15,7 +15,7 @@ fun NavController.navigateToSummary(){
 
 fun NavGraphBuilder.summaryScreen(
     onBackClick: () -> Unit,
-    onNavigateToDetailScreen: () -> Unit
+    onNavigateToDetailScreen: (Int) -> Unit
 ) {
     composable(route = SUMMARY_ROUTE) {
         BackHandler (true) { onBackClick() }

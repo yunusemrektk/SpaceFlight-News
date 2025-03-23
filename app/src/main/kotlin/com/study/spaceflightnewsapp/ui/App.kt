@@ -15,7 +15,6 @@ import com.study.ui.SpaceFlightNavigationBar
 
 @Composable
 fun App(appState: AppState, navHostController: NavHostController) {
-
     Scaffold(
         bottomBar = {
             SpaceFlightNavigationBar {
