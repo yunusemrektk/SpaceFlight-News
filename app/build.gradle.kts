@@ -30,11 +30,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21 // Changed
+        targetCompatibility = JavaVersion.VERSION_21 // Changed
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "21" // Changed
     }
     buildFeatures {
         compose = true
@@ -74,6 +74,10 @@ dependencies {
 
     //Feature Module
     implementation(project(":common:ui"))
+    implementation(project(":core:data"))
+    implementation(project(":core:datastore"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:network"))
     implementation(project(":feature:main"))
     implementation(project(":feature:detail"))
     implementation(project(":feature:summary"))

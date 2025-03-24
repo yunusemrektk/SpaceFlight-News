@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.study.data.model.NewsDetail
+import com.study.model.NewsDetail
 import com.study.ui.DetailItemScreen
 import com.study.ui.ErrorScreen
 import com.study.ui.LoadingScreen

@@ -1,9 +1,18 @@
 package com.study.data.repository
 
-import com.study.data.model.NewsSummary
+import com.study.model.NewsDetail
+import com.study.model.NewsSummary
+import com.study.model.UserData
+import kotlinx.coroutines.flow.Flow
 
 interface UserDataRepository {
-    suspend fun setNews(newsSummary: List<NewsSummary>)
+    val userData: Flow<UserData>
 
-    suspend fun getSavedNews(): List<NewsSummary>
+    fun saveSummaries(newsSummary: List<NewsSummary>)
+
+    fun saveDetails(newsSummary: List<NewsDetail>)
+
+    fun saveFavorites(newsSummary: NewsDetail, isLiked: Boolean)
+
+    fun observeAllFavorites() : Flow<List<NewsDetail>>
 }

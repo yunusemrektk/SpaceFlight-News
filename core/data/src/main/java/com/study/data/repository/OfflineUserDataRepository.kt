@@ -1,32 +1,24 @@
 package com.study.data.repository
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.study.data.model.NewsSummary
 import com.study.datastore.UserPreferencesDataSource
+import com.study.model.NewsDetail
+import com.study.model.NewsSummary
+import com.study.model.UserData
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class OfflineUserDataRepository @Inject constructor(
     private val userPreferencesDataSource: UserPreferencesDataSource,
-    private val gson:Gson = Gson()
 ) : UserDataRepository
 {
-    private val keySummary = "SUMMARIES"
 
-    override suspend fun setNews(newsSummary: List<NewsSummary>) {
-        userPreferencesDataSource.saveString(keySummary, sharedSummaryToEntity(newsSummary))
-    }
+    override val userData: Flow<UserData> = userPreferencesDataSource.userData
 
-    override suspend fun getSavedNews(): List<NewsSummary> {
-        return sharedSummaryToObject(userPreferencesDataSource.getString(keySummary, ""))
-    }
+    override fun saveSummaries(newsSummary: List<NewsSummary>) = userPreferencesDataSource.saveSummaries(newsSummary)
 
-    private fun sharedSummaryToEntity(news : List<NewsSummary>): String {
-        return gson.toJson(news)
-    }
+    override fun saveDetails(newsSummary: List<NewsDetail>) = userPreferencesDataSource.saveDetails(newsSummary)
 
-    private fun sharedSummaryToObject(json: String):List<NewsSummary> {
-        val type = object : TypeToken<List<NewsSummary>>() {}.type
-        return gson.fromJson(json, type)
-    }
+    override fun saveFavorites(favorites: NewsDetail, isLiked: Boolean) = userPreferencesDataSource.saveFavorites(favorites, isLiked)
+
+    override fun observeAllFavorites(): Flow<List<NewsDetail>> = userPreferencesDataSource.getFavorites()
 }

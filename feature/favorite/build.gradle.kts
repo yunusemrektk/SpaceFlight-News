@@ -67,6 +67,7 @@ dependencies {
     implementation(project(":common:ui"))
     implementation(project(":core:domain"))
     implementation(project(":core:data"))
+    implementation(project(":core:model"))
 
     //Navigtaion
     implementation(libs.androidx.navigation.compose)

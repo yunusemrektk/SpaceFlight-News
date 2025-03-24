@@ -1,12 +1,18 @@
 package com.study.domain
 
-import com.study.data.repository.FavoriteRepository
+import com.study.data.repository.OfflineUserDataRepository
+import com.study.model.NewsDetail
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class RemoveFavoriteUseCase @Inject constructor(
-    val favoriteRepository: FavoriteRepository
+    val offlineUserDataRepository: OfflineUserDataRepository
 ) {
-    fun invoke(id: Int): Flow<Any> = favoriteRepository.removeLikedNews(id)
+    fun invoke(id: NewsDetail): Flow<Any> = flow {
+        offlineUserDataRepository.saveFavorites(id, false)
+
+    }
+
 
 }

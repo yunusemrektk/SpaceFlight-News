@@ -1,7 +1,7 @@
 package com.study.data.repository
 
-import com.study.data.model.NewsSummary
-import com.study.data.model.entitySummaryToApi
+import com.study.model.NewsSummary
+import com.study.network.model.asExternalModel
 import com.study.network.repository.ApiRepository
 import javax.inject.Inject
 
@@ -11,6 +11,6 @@ class GetSummaryRepository @Inject constructor(
 {
 
     override suspend fun getNewsSummary(): List<NewsSummary> {
-       return entitySummaryToApi(apiRepository.getSummary())
+       return apiRepository.getSummary().asExternalModel()
     }
 }

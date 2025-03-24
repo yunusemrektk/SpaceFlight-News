@@ -1,6 +1,6 @@
-package com.study.data.model
+package com.study.model
 
-data class NewsDetail(
+class NewsDetail(
     val id: Int = 0,
     val title: String = "",
     val article: String = "",

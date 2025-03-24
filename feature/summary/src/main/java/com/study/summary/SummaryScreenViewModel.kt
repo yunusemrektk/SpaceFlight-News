@@ -3,7 +3,6 @@ package com.study.summary
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.study.data.repository.UserDataRepository
 import com.study.domain.GetSummaryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,8 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SummaryScreenViewModel @Inject constructor(
-    val getSummaryUseCase: GetSummaryUseCase,
-    val offlineDataRepository: UserDataRepository
+    val getSummaryUseCase: GetSummaryUseCase
 ) : ViewModel()
 {
     val summaryScreenUiState = MutableStateFlow<SummaryScreenUiState>(SummaryScreenUiState.Loading)
@@ -32,7 +30,6 @@ class SummaryScreenViewModel @Inject constructor(
                  }
                  .collect { newsSummary->
                      Log.e("SummaryScreenViewModel", "Get Summary Success news size: ${newsSummary.size}")
-                     offlineDataRepository.setNews(newsSummary)
                      summaryScreenUiState.value = SummaryScreenUiState.Summary(newsSummary = newsSummary)
             }
         }

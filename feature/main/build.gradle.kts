@@ -67,6 +67,7 @@ dependencies {
     //Module
     implementation(project(":common:ui"))
     implementation(project(":feature:detail"))
+    implementation(project(":core:model"))
 
     //Navigtaion
     implementation(libs.androidx.navigation.compose)

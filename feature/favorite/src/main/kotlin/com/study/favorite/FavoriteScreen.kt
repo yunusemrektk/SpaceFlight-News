@@ -1,5 +1,6 @@
 package com.study.favorite
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,11 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.study.data.model.NewsDetail
+import com.study.model.NewsDetail
 import com.study.ui.DetailItemScreen
-import com.study.ui.ErrorScreen
 import com.study.ui.LoadingScreen
-
 import com.study.ui.NewsCard
 import com.study.ui.SearchBox
 
@@ -43,8 +42,11 @@ fun FavoriteRoute(
 ) {
 
     val favoriteScreenUiState by favoriteScreenViewModel.favoriteScreenUiState.collectAsStateWithLifecycle()
+    val favoriteListUiState by favoriteScreenViewModel.favoritesUiState.collectAsStateWithLifecycle()
+
     FavoriteScreen(
         favoriteScreenUiState = favoriteScreenUiState,
+        favoriteListUiState = favoriteListUiState,
         onBackClick = favoriteScreenViewModel::onBackClicked,
         onDetailClick = favoriteScreenViewModel::onDetailClicked,
         onLikeClick =  favoriteScreenViewModel::onLikeClicked
@@ -54,9 +56,10 @@ fun FavoriteRoute(
 @Composable
 fun FavoriteScreen(
     favoriteScreenUiState: FavoriteScreenUiState,
+    favoriteListUiState: FavoriteListsUiState,
     onBackClick: () -> Unit,
     onDetailClick: (NewsDetail) -> Unit,
-    onLikeClick: (Int) -> Unit,
+    onLikeClick: (NewsDetail) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -77,8 +80,7 @@ fun FavoriteScreen(
 
             is FavoriteScreenUiState.ListView -> {
                 FavoriteListScreen(
-                    news = favoriteScreenUiState.likedNews,
-                    errorMessage = favoriteScreenUiState.errorMessage,
+                    favoriteListUiState = favoriteListUiState,
                     onDetailClick = onDetailClick
                 )
             }
@@ -89,9 +91,29 @@ fun FavoriteScreen(
 
 @Composable
 fun FavoriteListScreen(
+    favoriteListUiState: FavoriteListsUiState,
+    onDetailClick: (NewsDetail) -> Unit
+) {
+
+    when(favoriteListUiState) {
+        is FavoriteListsUiState.Loading -> {
+
+        }
+
+        is FavoriteListsUiState.Success -> {
+            Log.e("MYTEST","EMIT SUCCCESS: ${favoriteListUiState.favorites.size}")
+            FavoritesGrid(
+                news = favoriteListUiState.favorites,
+                onDetailClick = onDetailClick
+            )
+        }
+    }
+}
+
+@Composable
+fun FavoritesGrid(
     modifier: Modifier = Modifier,
     news: List<NewsDetail>,
-    errorMessage: String,
     onDetailClick: (NewsDetail) -> Unit
 ) {
     Box(
@@ -112,16 +134,13 @@ fun FavoriteListScreen(
         }
     }
 
-    if(errorMessage.isNotEmpty()) {
-        ErrorScreen(errorMessage = errorMessage)
-    }
 }
 
 @Composable
 fun FavoriteDetail(
     newsDetail: NewsDetail,
     onBackClick: () -> Unit,
-    onLikeClick: (Int) -> Unit
+    onLikeClick: (NewsDetail) -> Unit
 ) {
     DetailItemScreen(
         title = newsDetail.title,
@@ -130,7 +149,7 @@ fun FavoriteDetail(
         date = newsDetail.date,
         isSaved = true,
         onBackClick = onBackClick,
-        onLikeClick = { onLikeClick(newsDetail.id) }
+        onLikeClick = { onLikeClick(newsDetail) }
     )
 }
 
@@ -152,6 +171,10 @@ fun FavoriteList(
         return
     }
 
+    val filteredFavorites = news.filter { detail ->
+        detail.title.isNotEmpty() && detail.title.lowercase().contains(searchQuery.lowercase())
+    }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -159,15 +182,12 @@ fun FavoriteList(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        news.filter {
-            it.title.isNotEmpty() && it.title.lowercase().contains(searchQuery.lowercase())
-        }.let {
-            items(it) { item->
-                FavoriteItem(
-                    title = item.title,
-                    onItemClick = { onItemClick(item) },
-                )
-            }
+        items(filteredFavorites) { item ->
+            FavoriteItem(
+                title = item.title,
+                onItemClick = { onItemClick(item) },
+            )
+
         }
     }
 }

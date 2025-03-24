@@ -52,10 +52,9 @@ dependencies {
     kaptTest("com.google.dagger:hilt-compiler:2.48.1")
 
     //Gson
-    implementation("com.google.code.gson:gson:2.10.1")
-
-    implementation(project(":core:datastore"))
-    implementation(project(":core:network"))
+    api(project(":core:datastore"))
+    api(project(":core:network"))
+    implementation(project(":core:model"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

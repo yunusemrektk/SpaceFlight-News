@@ -35,6 +35,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:model"))
+
     //Dependency Injection
     // Hilt
     implementation("com.google.dagger:hilt-android:2.48.1")
@@ -50,6 +52,8 @@ dependencies {
     // For local unit tests
     testImplementation("com.google.dagger:hilt-android-testing:2.48.1")
     kaptTest("com.google.dagger:hilt-compiler:2.48.1")
+
+    implementation("com.google.code.gson:gson:2.10.1")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

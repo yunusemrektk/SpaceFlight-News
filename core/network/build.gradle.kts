@@ -35,8 +35,7 @@ android {
 }
 
 dependencies {
-    //Dependency Injection
-    // Hilt
+    implementation(project(":core:model"))
     //Dependency Injection
     // Hilt
     implementation("com.google.dagger:hilt-android:2.48.1")

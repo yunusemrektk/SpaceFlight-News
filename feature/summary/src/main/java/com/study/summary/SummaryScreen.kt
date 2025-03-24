@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.study.data.model.NewsSummary
+import com.study.model.NewsSummary
 import com.study.ui.ErrorScreen
 import com.study.ui.LoadingScreen
 import com.study.ui.NewsCard
@@ -120,6 +120,10 @@ fun SummaryList(
         return
     }
 
+    val filteredNews = news.filter {
+        it.title.isNotEmpty() && it.title.lowercase().contains(searchQuery.lowercase())
+    }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -127,17 +131,13 @@ fun SummaryList(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        news.filter {
-            it.title.isNotEmpty() && it.title.lowercase().contains(searchQuery.lowercase())
-        }.let {
-            items(it) { item ->
-                NewsItem(
-                    title = item.title,
-                    summary = item.summary,
-                    date = item.date,
-                    onItemClick = { onItemClick(item.id) }
-                )
-            }
+        items(filteredNews) { item ->
+            NewsItem(
+                title = item.title,
+                summary = item.summary,
+                date = item.date,
+                onItemClick = { onItemClick(item.id) }
+            )
         }
     }
 }

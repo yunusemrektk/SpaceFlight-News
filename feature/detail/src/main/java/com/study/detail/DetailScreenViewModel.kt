@@ -4,11 +4,11 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.study.data.model.NewsDetail
-import com.study.data.repository.FavoriteRepository
+import com.study.data.repository.OfflineUserDataRepository
 import com.study.detail.navigation.ITEM_ID
 import com.study.domain.GetDetailUseCase
 import com.study.domain.SaveFavoriteUseCase
+import com.study.model.NewsDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
@@ -18,8 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailScreenViewModel @Inject constructor(
     val getDetailUseCase: GetDetailUseCase,
-    val favoriteRepository: FavoriteRepository,
     val saveFavoriteUseCase: SaveFavoriteUseCase,
+    val offlineUserDataRepository: OfflineUserDataRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val detailScreenUiState = MutableStateFlow<DetailScreenUIState>(DetailScreenUIState.Loading)
@@ -38,19 +38,16 @@ class DetailScreenViewModel @Inject constructor(
                     detailScreenUiState.value = DetailScreenUIState.Detail(errorMessage = "Can not get the details of the news")
                 }
                 .collect { item ->
-                    favoriteRepository.isItemLiked(item.id)
-                        .collect { isSaved ->
-                            item.isSaved = isSaved
-                            detailScreenUiState.value = DetailScreenUIState.Detail(item)
-                        }
-
+                    //TODO IS LIKED?
+                    detailScreenUiState.value = DetailScreenUIState.Detail(item)
                 }
         }
     }
 
     fun onFavoriteClicked(newsDetail: NewsDetail) {
+        //TODO IS ITEM LIKED BEFORE
         viewModelScope.launch {
-            saveFavoriteUseCase.invoke(newsDetail)
+            saveFavoriteUseCase.invoke(newsDetail, true)
                 .catch {
                     Log.e("DetailScreenViewModel", "Save Favorite Error: ${it.message}")
                 }

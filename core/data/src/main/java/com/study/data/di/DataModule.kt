@@ -2,8 +2,6 @@ package com.study.data.di
 
 import android.content.SharedPreferences
 import com.study.data.repository.DetailRepository
-import com.study.data.repository.FavoriteNewsRepository
-import com.study.data.repository.FavoriteRepository
 import com.study.data.repository.GetDetailRepository
 import com.study.data.repository.GetSummaryRepository
 import com.study.data.repository.OfflineUserDataRepository
@@ -44,15 +42,6 @@ class DataModule {
         apiRepository: ApiRepository
     ): DetailRepository {
         return GetDetailRepository(apiRepository)
-    }
-
-
-    @Singleton
-    @Provides
-    fun provideFavoriteRepository(
-        sharedPreferences: UserPreferencesDataSource
-    ): FavoriteRepository {
-        return FavoriteNewsRepository(sharedPreferences)
     }
 
     @Singleton

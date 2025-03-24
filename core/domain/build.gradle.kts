@@ -55,6 +55,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
     implementation(project(":core:data"))
     implementation(project(":core:network"))
+    implementation(project(":core:model"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
