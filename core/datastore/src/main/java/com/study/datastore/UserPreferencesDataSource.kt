@@ -55,6 +55,10 @@ class UserPreferencesDataSource @Inject constructor(
 
     fun saveDetails(newsDetails: NewsDetail) {
         _userData.update { currentData ->
+            if(currentData.newsDetail[newsDetails.id] != null) {
+                return
+            }
+
             val updatedDetails = currentData.newsDetail + (newsDetails.id to newsDetails)
 
             val updatedData = currentData.copy(newsDetail = updatedDetails)
