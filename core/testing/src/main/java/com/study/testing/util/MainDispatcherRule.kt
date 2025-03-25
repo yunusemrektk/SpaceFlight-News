@@ -1,4 +1,4 @@
-package com.study.testing
+package com.study.testing.util
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.TestDispatcher

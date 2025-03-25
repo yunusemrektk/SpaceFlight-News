@@ -4,8 +4,8 @@ import com.study.domain.RemoveFavoriteUseCase
 import com.study.favorite.FavoriteScreenUiState.ListView
 import com.study.favorite.FavoriteScreenUiState.Loading
 import com.study.model.NewsDetail
-import com.study.testing.MainDispatcherRule
 import com.study.testing.TestOfflineUserDataRepository
+import com.study.testing.util.MainDispatcherRule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -28,8 +28,8 @@ import org.junit.Test
 class FavoriteScreenViewModelTest {
 
     private val offlineUserDataRepository = TestOfflineUserDataRepository()
-    private lateinit var viewModel: FavoriteScreenViewModel
     private val removeFavoriteUseCase = RemoveFavoriteUseCase(offlineUserDataRepository)
+    private lateinit var viewModel: FavoriteScreenViewModel
 
     private val testDispatcher = StandardTestDispatcher()
     @get:Rule
