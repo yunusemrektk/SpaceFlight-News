@@ -10,9 +10,13 @@ interface UserDataRepository {
 
     fun saveSummaries(newsSummary: List<NewsSummary>)
 
-    fun saveDetails(newsSummary: List<NewsDetail>)
+    fun saveDetails(newsSummary: NewsDetail)
 
     fun saveFavorites(newsSummary: NewsDetail, isLiked: Boolean)
+
+    fun observeAllSummaries() : Flow<List<NewsSummary>>
+
+    fun observeDetail(id: Int) : Flow<NewsDetail>
 
     fun observeAllFavorites() : Flow<List<NewsDetail>>
 }

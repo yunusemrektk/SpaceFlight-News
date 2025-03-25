@@ -2,6 +2,6 @@ package com.study.model
 
 data class UserData(
     val newsSummary: List<NewsSummary>,
-    val newsDetail: List<NewsDetail>,
-    val favorites: Map<NewsDetail, Boolean>
+    val newsDetail: Map<Int, NewsDetail>,
+    val favorites: Map<Int, NewsDetail>
 )

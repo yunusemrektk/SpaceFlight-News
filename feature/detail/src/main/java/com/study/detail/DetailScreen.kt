@@ -30,7 +30,7 @@ fun DetailRoute(
 fun DetailScreen(
     detailScreenUIState: DetailScreenUIState,
     onBackClick: () -> Unit,
-    onLikeClick: (NewsDetail) -> Unit
+    onLikeClick: (NewsDetail, Boolean) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -50,8 +50,8 @@ fun DetailScreen(
                     isSaved = detailScreenUIState.detail.isSaved,
                     errorMessage = detailScreenUIState.errorMessage,
                     onBackClick = onBackClick,
-                    onLikeClick = {
-                        onLikeClick(detailScreenUIState.detail)
+                    onLikeClick = { isLiked ->
+                        onLikeClick(detailScreenUIState.detail, isLiked)
                     }
                 )
 
@@ -70,7 +70,7 @@ fun DetailScreen(
     isSaved: Boolean,
     errorMessage: String,
     onBackClick: () -> Unit,
-    onLikeClick: () -> Unit
+    onLikeClick: (Boolean) -> Unit
 ) {
     DetailItemScreen(
         title = title,
@@ -94,5 +94,5 @@ fun DetailScreen(
 @Composable
 fun PreviewDetailScreen() {
     val detailScreenUIState = DetailScreenUIState.Detail(NewsDetail(), "")
-    DetailScreen(detailScreenUIState = detailScreenUIState, onBackClick = {} , onLikeClick = {})
+    DetailScreen(detailScreenUIState = detailScreenUIState, onBackClick = {} , onLikeClick = {t,b -> })
 }

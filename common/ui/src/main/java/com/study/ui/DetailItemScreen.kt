@@ -42,7 +42,7 @@ fun DetailItemScreen(
     date: String,
     isSaved: Boolean,
     onBackClick: () -> Unit,
-    onLikeClick: () -> Unit
+    onLikeClick: (Boolean) -> Unit
 ){
 
     Box(modifier = Modifier
@@ -58,8 +58,7 @@ fun DetailItemScreen(
             Column {
                 NewsDetailTitleComponent(title = title)
                 NewsDetailArticleComponent(modifier = Modifier.weight(1f), summary = article, imageUrl)
-                NewsDetailDateComponent(date = date, saved = isSaved, onBackClick = onBackClick,
-                    onLikeClicked = { onLikeClick() })
+                NewsDetailDateComponent(date = date, saved = isSaved, onBackClick = onBackClick, onLikeClicked =onLikeClick)
             }
         }
     }
@@ -131,7 +130,7 @@ fun NewsDetailDateComponent(
     date: String,
     saved: Boolean,
     onBackClick:() -> Unit,
-    onLikeClicked:() -> Unit
+    onLikeClicked:(Boolean) -> Unit
 ) {
     Box(
         modifier = modifier

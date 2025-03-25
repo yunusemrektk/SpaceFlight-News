@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,7 +36,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.study.model.NewsSummary
 import com.study.ui.ErrorScreen
-import com.study.ui.LoadingScreen
 import com.study.ui.NewsCard
 import com.study.ui.SearchBox
 
@@ -43,10 +44,11 @@ fun SummaryRoute(
     onNavigateToDetailScreen: (Int) -> Unit,
     summaryScreenViewModel: SummaryScreenViewModel = hiltViewModel()
 ) {
-    val summaryScreenUiState by summaryScreenViewModel.summaryScreenUiState.collectAsStateWithLifecycle()
+    val summaryScreenUiState by summaryScreenViewModel.uiState.collectAsStateWithLifecycle()
 
     SummaryScreen(
         summaryScreenUiState = summaryScreenUiState,
+        onRefresh = summaryScreenViewModel::onRefresh,
         onItemClicked = onNavigateToDetailScreen
     )
 }
@@ -57,6 +59,7 @@ fun SummaryRoute(
 fun SummaryScreen(
     modifier: Modifier = Modifier,
     summaryScreenUiState: SummaryScreenUiState,
+    onRefresh: () -> Unit,
     onItemClicked: (Int) -> Unit
 ) {
 
@@ -66,14 +69,12 @@ fun SummaryScreen(
             .background(Color.Gray)
     ) {
         when (summaryScreenUiState) {
-            is SummaryScreenUiState.Loading -> {
-                LoadingScreen()
-            }
-
             is SummaryScreenUiState.Summary -> {
                 SummaryListScreen(
                     news = summaryScreenUiState.newsSummary,
+                    isRefreshing = summaryScreenUiState.isRefreshing,
                     errorMessage = summaryScreenUiState.errorMessage,
+                    onRefresh = onRefresh,
                     onItemClick = onItemClicked
                 )
             }
@@ -86,6 +87,8 @@ fun SummaryListScreen(
     modifier: Modifier = Modifier,
     news: List<NewsSummary>,
     errorMessage: String,
+    isRefreshing: Boolean,
+    onRefresh: () -> Unit,
     onItemClick: (Int) -> Unit
 ) {
     val searchQuery = remember { mutableStateOf("") }
@@ -94,7 +97,7 @@ fun SummaryListScreen(
             searchQuery = searchQuery.value,
             onSearchQueryChanged = { searchQuery.value = it },
             onSearchTriggered = {})
-        SummaryList(news, onItemClick, searchQuery.value)
+        SummaryList(news = news, isRefreshing = isRefreshing, onRefresh = onRefresh, onItemClick = onItemClick, searchQuery = searchQuery.value)
     }
 
     if(errorMessage.isNotEmpty()) {
@@ -102,42 +105,40 @@ fun SummaryListScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SummaryList(
+    modifier: Modifier = Modifier,
     news: List<NewsSummary>,
+    isRefreshing: Boolean,
+    onRefresh: () -> Unit,
     onItemClick: (Int) -> Unit,
     searchQuery: String
 ) {
-    if(news.isEmpty()) {
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 15.dp),
-            text = "Could not get the news from the server",
-            textAlign = TextAlign.Center,
-            style = TextStyle(fontSize = 16.sp, color = Color.LightGray)
-        )
-        return
-    }
 
     val filteredNews = news.filter {
         it.title.isNotEmpty() && it.title.lowercase().contains(searchQuery.lowercase())
     }
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .navigationBarsPadding(),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = onRefresh,
+        modifier = modifier
     ) {
-        items(filteredNews) { item ->
-            NewsItem(
-                title = item.title,
-                summary = item.summary,
-                date = item.date,
-                onItemClick = { onItemClick(item.id) }
-            )
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .navigationBarsPadding(),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            items(filteredNews) { item ->
+                NewsItem(
+                    title = item.title,
+                    summary = item.summary,
+                    date = item.date,
+                    onItemClick = { onItemClick(item.id) }
+                )
+            }
         }
     }
 }

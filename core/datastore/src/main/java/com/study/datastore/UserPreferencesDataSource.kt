@@ -1,6 +1,7 @@
 package com.study.datastore
 
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.core.content.edit
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -11,25 +12,39 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
-
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 class UserPreferencesDataSource @Inject constructor(
     private val userPreferencesDataSource: SharedPreferences,
-){
+) {
     private val gson: Gson = Gson()
     private val keyUserData: String = "user_data"
 
-    var initData = UserData(
-        newsSummary = emptyList(),
-        newsDetail = emptyList(),
-        favorites = emptyMap()
+
+    val _userData = MutableStateFlow(
+        getUserData()
     )
-
-    val _userData = MutableStateFlow(initData)
-
     val userData: Flow<UserData> = _userData.asStateFlow()
+
+    fun getUserData(): UserData {
+        var strUserData = ""
+        try {
+            strUserData = getString()
+        }catch (_: Exception) {
+            Log.e("UserPreferencesDataSource", "Error while getting the data from shared pref")
+        }
+
+        return if(strUserData.isNotEmpty()) {
+            stringToUserData(strUserData)
+        } else {
+            UserData(
+                newsSummary = emptyList(),
+                newsDetail = emptyMap(),
+                favorites = emptyMap()
+            )
+        }
+    }
 
     fun saveSummaries(newsSummaries: List<NewsSummary>) {
         _userData.update { currentData ->
@@ -39,9 +54,11 @@ class UserPreferencesDataSource @Inject constructor(
         }
     }
 
-    fun saveDetails(newsDetails: List<NewsDetail>) {
+    fun saveDetails(newsDetails: NewsDetail) {
         _userData.update { currentData ->
-            val updatedData = currentData.copy(newsDetail = newsDetails)
+            val updatedDetails = currentData.newsDetail + (newsDetails.id to newsDetails)
+
+            val updatedData = currentData.copy(newsDetail = updatedDetails)
             saveString(userDataToString(updatedData))
             updatedData
         }
@@ -49,37 +66,35 @@ class UserPreferencesDataSource @Inject constructor(
 
     fun saveFavorites(favorites: NewsDetail, isLiked: Boolean) {
         _userData.update { currentData ->
-            val updatedFavorites = if (isLiked) {
-                currentData.favorites + (favorites to true) // Add
+            val updatedDetail = currentData.newsDetail
+            if (isLiked) {
+                updatedDetail[favorites.id]?.isSaved = true
             } else {
-                currentData.favorites - favorites // Remove
+                updatedDetail[favorites.id]?.isSaved = false
             }
 
-            val updatedData = currentData.copy(favorites = updatedFavorites)
+            val updatedData = currentData.copy(favorites = updatedDetail)
             saveString(userDataToString(updatedData))
             updatedData
         }
     }
 
-    fun getUserData() {
-        _userData.update { currentData ->
-            val strUserData = getString()
-            if(strUserData.isNotEmpty()) {
-                stringToUserData(strUserData)
-            } else {
-                initData
-            }
-        }
+
+    fun getSummaries(): Flow<List<NewsSummary>> = _userData.map { currentData ->
+        currentData.newsSummary
     }
 
+    fun getDetail(id: Int): Flow<NewsDetail> = _userData.map { currentData ->
+        currentData.newsDetail[id] as NewsDetail
+    }
+
+
     fun getFavorites(): Flow<List<NewsDetail>> = _userData.map { currentData ->
-            if (currentData.favorites.keys.isNotEmpty()) {
-                currentData.favorites.keys.toList()
-            } else {
-                emptyList()
-            }
+        currentData.newsDetail.values.toList().filter { detail ->
+            detail.isSaved
         }
 
+    }
 
     fun saveString(value: String) {
         userPreferencesDataSource.edit { putString(keyUserData, value) }
@@ -89,7 +104,7 @@ class UserPreferencesDataSource @Inject constructor(
         return userPreferencesDataSource.getString(keyUserData, "") ?: ""
     }
 
-    private fun userDataToString(userData : UserData): String {
+    private fun userDataToString(userData: UserData): String {
         return gson.toJson(userData)
     }
 

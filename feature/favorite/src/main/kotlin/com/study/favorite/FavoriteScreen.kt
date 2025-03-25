@@ -1,6 +1,5 @@
 package com.study.favorite
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,11 +42,13 @@ fun FavoriteRoute(
 ) {
 
     val favoriteScreenUiState by favoriteScreenViewModel.favoriteScreenUiState.collectAsStateWithLifecycle()
-    val favoriteListUiState by favoriteScreenViewModel.favoritesUiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(true) {
+        favoriteScreenViewModel.getFavorites()
+    }
 
     FavoriteScreen(
         favoriteScreenUiState = favoriteScreenUiState,
-        favoriteListUiState = favoriteListUiState,
         onBackClick = favoriteScreenViewModel::onBackClicked,
         onDetailClick = favoriteScreenViewModel::onDetailClicked,
         onLikeClick =  favoriteScreenViewModel::onLikeClicked
@@ -56,7 +58,6 @@ fun FavoriteRoute(
 @Composable
 fun FavoriteScreen(
     favoriteScreenUiState: FavoriteScreenUiState,
-    favoriteListUiState: FavoriteListsUiState,
     onBackClick: () -> Unit,
     onDetailClick: (NewsDetail) -> Unit,
     onLikeClick: (NewsDetail) -> Unit,
@@ -80,7 +81,7 @@ fun FavoriteScreen(
 
             is FavoriteScreenUiState.ListView -> {
                 FavoriteListScreen(
-                    favoriteListUiState = favoriteListUiState,
+                    favoriteListUiState = favoriteScreenUiState,
                     onDetailClick = onDetailClick
                 )
             }
@@ -91,22 +92,20 @@ fun FavoriteScreen(
 
 @Composable
 fun FavoriteListScreen(
-    favoriteListUiState: FavoriteListsUiState,
+    favoriteListUiState: FavoriteScreenUiState,
     onDetailClick: (NewsDetail) -> Unit
 ) {
 
     when(favoriteListUiState) {
-        is FavoriteListsUiState.Loading -> {
-
-        }
-
-        is FavoriteListsUiState.Success -> {
-            Log.e("MYTEST","EMIT SUCCCESS: ${favoriteListUiState.favorites.size}")
+        is FavoriteScreenUiState.ListView -> {
             FavoritesGrid(
-                news = favoriteListUiState.favorites,
+                news = favoriteListUiState.likedNews,
                 onDetailClick = onDetailClick
             )
         }
+
+        is FavoriteScreenUiState.Detail -> TODO()
+        FavoriteScreenUiState.Loading -> TODO()
     }
 }
 

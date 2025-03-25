@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 fun LikeButton(
     modifier: Modifier = Modifier,
     saved: Boolean,
-    onLikeClicked: () -> Unit
+    onLikeClicked: (Boolean) -> Unit
 ) {
     val isLiked = remember { mutableStateOf(saved) }
 
@@ -37,11 +37,11 @@ fun LikeButton(
             .size(30.dp),
         onClick = {
             isLiked.value = !isLiked.value
-            onLikeClicked()
+            onLikeClicked(isLiked.value)
         }) {
         Icon(
             imageVector = icon,
-            contentDescription = "navigationIconContentDescription",
+            contentDescription = "icon_like_desc",
             tint = color,
         )
     }

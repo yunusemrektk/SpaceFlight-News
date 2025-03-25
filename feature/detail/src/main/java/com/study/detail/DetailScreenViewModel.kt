@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.study.data.repository.OfflineUserDataRepository
 import com.study.detail.navigation.ITEM_ID
-import com.study.domain.GetDetailUseCase
 import com.study.domain.SaveFavoriteUseCase
 import com.study.model.NewsDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +16,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailScreenViewModel @Inject constructor(
-    val getDetailUseCase: GetDetailUseCase,
     val saveFavoriteUseCase: SaveFavoriteUseCase,
     val offlineUserDataRepository: OfflineUserDataRepository,
     savedStateHandle: SavedStateHandle
@@ -32,22 +30,20 @@ class DetailScreenViewModel @Inject constructor(
     fun initValues(){
         viewModelScope.launch {
             Log.d("DetailScreenViewModel", "Get Detail Item Id: ${itemId}")
-            getDetailUseCase.invoke(itemId)
+            offlineUserDataRepository.observeDetail(itemId)
                 .catch {
                     Log.e("DetailScreenViewModel", "Get Detail Error: ${it.message}")
                     detailScreenUiState.value = DetailScreenUIState.Detail(errorMessage = "Can not get the details of the news")
                 }
                 .collect { item ->
-                    //TODO IS LIKED?
                     detailScreenUiState.value = DetailScreenUIState.Detail(item)
                 }
         }
     }
 
-    fun onFavoriteClicked(newsDetail: NewsDetail) {
-        //TODO IS ITEM LIKED BEFORE
+    fun onFavoriteClicked(newsDetail: NewsDetail, isLiked: Boolean) {
         viewModelScope.launch {
-            saveFavoriteUseCase.invoke(newsDetail, true)
+            saveFavoriteUseCase.invoke(newsDetail, isLiked)
                 .catch {
                     Log.e("DetailScreenViewModel", "Save Favorite Error: ${it.message}")
                 }
