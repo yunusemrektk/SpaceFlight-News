@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.study.data.repository.OfflineUserDataRepository
+import com.study.data.repository.UserDataRepository
 import com.study.detail.navigation.ITEM_ID
 import com.study.domain.SaveFavoriteUseCase
 import com.study.model.NewsDetail
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailScreenViewModel @Inject constructor(
     val saveFavoriteUseCase: SaveFavoriteUseCase,
-    val offlineUserDataRepository: OfflineUserDataRepository,
+    val offlineUserDataRepository: UserDataRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val detailScreenUiState = MutableStateFlow<DetailScreenUIState>(DetailScreenUIState.Loading)
@@ -27,13 +27,14 @@ class DetailScreenViewModel @Inject constructor(
         initValues()
     }
 
-    fun initValues(){
+    fun initValues() {
         viewModelScope.launch {
             Log.d("DetailScreenViewModel", "Get Detail Item Id: ${itemId}")
             offlineUserDataRepository.observeDetail(itemId)
                 .catch {
                     Log.e("DetailScreenViewModel", "Get Detail Error: ${it.message}")
-                    detailScreenUiState.value = DetailScreenUIState.Detail(errorMessage = "Can not get the details of the news")
+                    detailScreenUiState.value =
+                        DetailScreenUIState.Detail(errorMessage = "Can not get the details of the news")
                 }
                 .collect { item ->
                     detailScreenUiState.value = DetailScreenUIState.Detail(item)

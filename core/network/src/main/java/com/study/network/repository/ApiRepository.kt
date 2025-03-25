@@ -11,7 +11,7 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
         return apiService.getSummary()
     }
 
-    suspend fun getDetail(id: Int) : Detail {
+    suspend fun getDetail(id: Int): Detail {
         return apiService.getDetail(id)
     }
 }

@@ -29,7 +29,7 @@ fun rememberSpaceFlightAppState(
 
 class AppState(val navController: NavHostController) {
     var topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.entries
-    var currentState : MutableState<TopLevelDestination> = mutableStateOf(TopLevelDestination.HOME)
+    var currentState: MutableState<TopLevelDestination> = mutableStateOf(TopLevelDestination.HOME)
 
     fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
         currentState.value = topLevelDestination

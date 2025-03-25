@@ -26,8 +26,7 @@ fun LoadingScreen(
     ) {
         Column(
             modifier = modifier
-                .fillMaxSize()
-            ,
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {

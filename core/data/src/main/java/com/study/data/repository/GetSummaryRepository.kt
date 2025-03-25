@@ -7,10 +7,8 @@ import javax.inject.Inject
 
 class GetSummaryRepository @Inject constructor(
     val apiRepository: ApiRepository,
-): SummaryRepository
-{
-
+) : SummaryRepository {
     override suspend fun getNewsSummary(): List<NewsSummary> {
-       return apiRepository.getSummary().asExternalModel()
+        return apiRepository.getSummary().asExternalModel()
     }
 }

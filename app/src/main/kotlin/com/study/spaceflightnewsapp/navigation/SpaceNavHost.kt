@@ -37,7 +37,7 @@ fun SpaceNavHost(
         )
         summaryScreen(
             onBackClick = { navHostController.popBackStack() },
-            onNavigateToDetailScreen = { id->
+            onNavigateToDetailScreen = { id ->
                 navHostController.navigateToDetail(id)
             }
         )

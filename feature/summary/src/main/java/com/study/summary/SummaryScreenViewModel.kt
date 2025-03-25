@@ -43,7 +43,7 @@ class SummaryScreenViewModel @Inject constructor(
             delay(1000) // TODO to show error message
             getOfflineUserDataUseCase.invoke()
                 .collect { list ->
-                    if(list.isEmpty()) {
+                    if (list.isEmpty()) {
                         SummaryScreenUiState.Summary(
                             errorMessage = "Error while getting the offline news",
                             isRefreshing = false
@@ -62,14 +62,14 @@ class SummaryScreenViewModel @Inject constructor(
     }
 
     private fun onOnlineCollect(state: SummaryScreenUiState) {
-        when(state) {
+        when (state) {
             is SummaryScreenUiState.Summary -> {
-                if(state.newsSummary.isEmpty()) {
-                    if(uiState.value is SummaryScreenUiState.Summary) {
+                if (state.newsSummary.isEmpty()) {
+                    if (uiState.value is SummaryScreenUiState.Summary) {
                         uiState.update {
                             SummaryScreenUiState.Summary(
                                 newsSummary = (uiState.value as SummaryScreenUiState.Summary).newsSummary,
-                                errorMessage = "Can not upload the news",
+                                errorMessage = "Can not update the news",
                                 isRefreshing = false
                             )
                         }
@@ -78,7 +78,7 @@ class SummaryScreenViewModel @Inject constructor(
                         uiState.update {
                             SummaryScreenUiState.Summary(
                                 newsSummary = state.newsSummary,
-                                errorMessage = "Can not upload the news",
+                                errorMessage = "Can not update the news",
                                 isRefreshing = false
                             )
                         }
@@ -87,12 +87,16 @@ class SummaryScreenViewModel @Inject constructor(
                     getOfflineData()
                 } else {
                     uiState.update {
-                        SummaryScreenUiState.Summary(newsSummary = state.newsSummary, isRefreshing = false)
+                        SummaryScreenUiState.Summary(
+                            newsSummary = state.newsSummary,
+                            isRefreshing = false
+                        )
                     }
                 }
             }
         }
     }
+
     private fun onStart() {
         uiState.update { it ->
             when (it) {

@@ -31,17 +31,16 @@ class UserPreferencesDataSource @Inject constructor(
         var strUserData = ""
         try {
             strUserData = getString()
-        }catch (_: Exception) {
+        } catch (_: Exception) {
             Log.e("UserPreferencesDataSource", "Error while getting the data from shared pref")
         }
 
-        return if(strUserData.isNotEmpty()) {
+        return if (strUserData.isNotEmpty()) {
             stringToUserData(strUserData)
         } else {
             UserData(
                 newsSummary = emptyList(),
-                newsDetail = emptyMap(),
-                favorites = emptyMap()
+                newsDetail = emptyMap()
             )
         }
     }
@@ -64,16 +63,20 @@ class UserPreferencesDataSource @Inject constructor(
         }
     }
 
-    fun saveFavorites(favorites: NewsDetail, isLiked: Boolean) {
+    fun saveFavorites(newDetail: NewsDetail, isLiked: Boolean) {
         _userData.update { currentData ->
-            val updatedDetail = currentData.newsDetail
-            if (isLiked) {
-                updatedDetail[favorites.id]?.isSaved = true
-            } else {
-                updatedDetail[favorites.id]?.isSaved = false
+            var updatedDetail = currentData.newsDetail
+            if(updatedDetail.isEmpty()) {
+                updatedDetail = currentData.newsDetail + (newDetail.id to newDetail)
             }
 
-            val updatedData = currentData.copy(favorites = updatedDetail)
+            if (isLiked) {
+                updatedDetail[newDetail.id]?.isSaved = true
+            } else {
+                updatedDetail[newDetail.id]?.isSaved = false
+            }
+
+            val updatedData = currentData.copy(newsDetail = updatedDetail)
             saveString(userDataToString(updatedData))
             updatedData
         }

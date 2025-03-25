@@ -1,5 +1,7 @@
 package com.study.ui
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -27,9 +29,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -43,11 +47,12 @@ fun DetailItemScreen(
     isSaved: Boolean,
     onBackClick: () -> Unit,
     onLikeClick: (Boolean) -> Unit
-){
-
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.Gray)
+) {
+    val context = LocalContext.current
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Gray)
     ) {
         NewsCard(
             modifier = Modifier
@@ -57,11 +62,33 @@ fun DetailItemScreen(
         ) {
             Column {
                 NewsDetailTitleComponent(title = title)
-                NewsDetailArticleComponent(modifier = Modifier.weight(1f), summary = article, imageUrl)
-                NewsDetailDateComponent(date = date, saved = isSaved, onBackClick = onBackClick, onLikeClicked =onLikeClick)
+                NewsDetailArticleComponent(
+                    modifier = Modifier.weight(1f),
+                    summary = article,
+                    imageUrl
+                )
+                NewsDetailDateComponent(
+                    date = date,
+                    saved = isSaved,
+                    onBackClick = onBackClick,
+                    onShareClick = { onShareClicked(context, title, article) },
+                    onLikeClicked = onLikeClick
+                )
             }
         }
     }
+}
+
+fun onShareClicked(context: Context, title: String, article: String) {
+    val sendIntent: Intent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_TEXT, article)
+        putExtra(Intent.EXTRA_TITLE, title)
+        type = "text/plain"
+    }
+
+    val shareIntent = Intent.createChooser(sendIntent, null)
+    context.startActivity(shareIntent)
 }
 
 @Composable
@@ -109,12 +136,13 @@ fun NewsDetailArticleComponent(
                 style = TextStyle(fontSize = 18.sp, color = Color.LightGray),
                 fontWeight = FontWeight.Normal
             )
-            if(imageUrl.isNotEmpty()) {
+            if (imageUrl.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(20.dp))
                 AsyncImage(
                     model = imageUrl,
-                    contentDescription = "image",
-                    modifier = Modifier.height(200.dp)
+                    contentDescription = "image_desc",
+                    modifier = Modifier
+                        .height(200.dp)
                         .fillMaxWidth()
                         .padding(10.dp)
                 )
@@ -129,8 +157,9 @@ fun NewsDetailDateComponent(
     modifier: Modifier = Modifier,
     date: String,
     saved: Boolean,
-    onBackClick:() -> Unit,
-    onLikeClicked:(Boolean) -> Unit
+    onBackClick: () -> Unit,
+    onShareClick: () -> Unit,
+    onLikeClicked: (Boolean) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -151,7 +180,12 @@ fun NewsDetailDateComponent(
             )
 
             Spacer(modifier = Modifier.weight(1f))
-            LikeButton(modifier = Modifier.padding(end = 20.dp), saved = saved, onLikeClicked = onLikeClicked)
+            ShareButton(modifier = Modifier.padding(end = 10.dp), onShareClicked = onShareClick)
+            LikeButton(
+                modifier = Modifier.padding(end = 20.dp),
+                saved = saved,
+                onLikeClicked = onLikeClicked
+            )
             Box(
                 modifier = modifier
                     .width(110.dp)
@@ -171,4 +205,18 @@ fun NewsDetailDateComponent(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewDetails() {
+    DetailItemScreen(
+        "title",
+        "aricle",
+        "imageUrl",
+        "date",
+        false,
+        onBackClick = {},
+        onLikeClick = {},
+    )
 }

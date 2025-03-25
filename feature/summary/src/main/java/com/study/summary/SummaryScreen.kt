@@ -30,6 +30,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -52,7 +55,6 @@ fun SummaryRoute(
         onItemClicked = onNavigateToDetailScreen
     )
 }
-
 
 
 @Composable
@@ -97,10 +99,16 @@ fun SummaryListScreen(
             searchQuery = searchQuery.value,
             onSearchQueryChanged = { searchQuery.value = it },
             onSearchTriggered = {})
-        SummaryList(news = news, isRefreshing = isRefreshing, onRefresh = onRefresh, onItemClick = onItemClick, searchQuery = searchQuery.value)
+        SummaryList(
+            news = news,
+            isRefreshing = isRefreshing,
+            onRefresh = onRefresh,
+            onItemClick = onItemClick,
+            searchQuery = searchQuery.value
+        )
     }
 
-    if(errorMessage.isNotEmpty()) {
+    if (errorMessage.isNotEmpty()) {
         ErrorScreen(errorMessage = errorMessage)
     }
 }
@@ -195,7 +203,7 @@ fun NewsItemSummaryComponent(
         modifier = modifier
             .fillMaxWidth()
             .padding(20.dp),
-        contentAlignment = Alignment.CenterStart
+        contentAlignment = Alignment.TopStart
     ) {
         Column {
             Text(
@@ -249,4 +257,31 @@ fun NewsItemDateComponent(
             )
         }
     }
+}
+
+class SummaryScreenParameterProvider : PreviewParameterProvider<SummaryScreenUiState> {
+
+    private fun provideNew(): List<NewsSummary> {
+        val new1 = NewsSummary(0, title = "Title 1", "Article 1", "1 Hour a go")
+        val new2 = NewsSummary(0, title = "Title 2", "Article 2", "2 Hour a go")
+        return listOf(
+            new1, new2
+        )
+    }
+
+    override val values: Sequence<SummaryScreenUiState> = sequenceOf(
+        SummaryScreenUiState.Summary(errorMessage = "Can not update the news", isRefreshing = true),
+        SummaryScreenUiState.Summary(newsSummary = provideNew()),
+        SummaryScreenUiState.Summary(),
+    )
+}
+
+
+@Preview
+@Composable
+fun PreviewSummaryScreen(
+    @PreviewParameter(SummaryScreenParameterProvider::class)
+    parameters: SummaryScreenUiState,
+) {
+    SummaryScreen(summaryScreenUiState = parameters, onRefresh = {}, onItemClicked = {})
 }

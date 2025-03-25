@@ -12,8 +12,7 @@ enum class TopLevelDestination(
     val title: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector
-)
-{
+) {
     HOME(
         title = "Home",
         selectedIcon = Icons.Rounded.Home,

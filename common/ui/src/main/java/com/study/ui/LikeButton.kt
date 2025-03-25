@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-
 fun LikeButton(
     modifier: Modifier = Modifier,
     saved: Boolean,

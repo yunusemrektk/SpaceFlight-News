@@ -17,7 +17,7 @@ class MainScreenViewModel @Inject constructor(
         initValues()
     }
 
-    private fun initValues(){
+    private fun initValues() {
         viewModelScope.launch {
             mainScreenUiState.value = MainScreenUiState.Summary
         }

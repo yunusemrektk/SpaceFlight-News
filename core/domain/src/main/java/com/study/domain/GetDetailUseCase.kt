@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class GetDetailUseCase @Inject constructor(
     val getDetailRepository: DetailRepository
-){
+) {
     operator fun invoke(id: Int): Flow<NewsDetail> =
         flow {
             emit(getDetailRepository.getNewsDetail(id))

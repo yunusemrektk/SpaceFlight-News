@@ -24,8 +24,8 @@ fun MainRoute(
 @Composable
 fun MainScreen(
     onNavigateToSummaryScreen: () -> Unit,
-    mainScreenUiState: MainScreenUiState)
-{
+    mainScreenUiState: MainScreenUiState
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()

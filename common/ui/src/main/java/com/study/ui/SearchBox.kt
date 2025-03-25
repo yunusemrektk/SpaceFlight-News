@@ -44,8 +44,8 @@ fun SearchBox(
         SearchTextField(
             onSearchQueryChanged = {
                 search.value = it
-                onSearchQueryChanged(it) }
-            ,
+                onSearchQueryChanged(it)
+            },
             onSearchTriggered = onSearchTriggered,
             searchQuery = search.value,
         )
@@ -75,7 +75,7 @@ private fun SearchTextField(
         leadingIcon = {
             Icon(
                 imageVector = Icons.Rounded.Search,
-                contentDescription = "cont2",
+                contentDescription = "search_desc",
                 tint = MaterialTheme.colorScheme.onSurface,
             )
         },
@@ -88,7 +88,7 @@ private fun SearchTextField(
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Close,
-                        contentDescription = "cont3",
+                        contentDescription = "close_desc",
                         tint = MaterialTheme.colorScheme.onSurface,
                     )
                 }
@@ -129,6 +129,6 @@ private fun SearchTextField(
 @Preview
 @Composable
 fun PreviewSearchBox() {
-    SearchBox(searchQuery = "" ,  onSearchQueryChanged = {}, onSearchTriggered = {})
+    SearchBox(searchQuery = "", onSearchQueryChanged = {}, onSearchTriggered = {})
 
 }

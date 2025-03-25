@@ -14,17 +14,18 @@ const val DETAIL_ROUTE = NAV_ROUTE +
         "/{$ITEM_ID}"
 
 
-fun NavController.navigateToDetail(id: Int){
+fun NavController.navigateToDetail(id: Int) {
     this.navigate("$NAV_ROUTE/$id")
 }
 
 fun NavGraphBuilder.detailScreen(
     onBackClick: () -> Unit
 ) {
-    composable(route = DETAIL_ROUTE, arguments = listOf(
+    composable(
+        route = DETAIL_ROUTE, arguments = listOf(
         navArgument(ITEM_ID) { type = NavType.IntType }
     )) {
-        BackHandler (true) { onBackClick() }
+        BackHandler(true) { onBackClick() }
         DetailRoute(
             onBackClick = onBackClick
         )

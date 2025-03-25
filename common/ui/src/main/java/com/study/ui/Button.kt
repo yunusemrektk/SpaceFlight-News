@@ -17,9 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun Button (
+fun Button(
     modifier: Modifier = Modifier,
-    onClick : () -> Unit,
+    onClick: () -> Unit,
     text: String = ""
 ) {
     androidx.compose.material3.Button(
@@ -33,7 +33,7 @@ fun Button (
             contentColor = MaterialTheme.colorScheme.onBackground,
         ),
         content = {
-            if(text.isNotEmpty()) {
+            if (text.isNotEmpty()) {
                 Text(
                     text = text,
                     style = TextStyle(fontSize = 16.sp, color = Color.White),

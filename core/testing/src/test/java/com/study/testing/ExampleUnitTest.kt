@@ -1,4 +1,4 @@
-package com.study.favorite
+package com.study.testing
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

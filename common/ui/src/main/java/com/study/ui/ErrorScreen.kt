@@ -38,7 +38,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun ErrorScreen(
     modifier: Modifier = Modifier,
-    errorMessage : String = "Oops!! Something went wrong",
+    errorMessage: String = "Oops!! Something went wrong",
     onDismiss: () -> Unit = {},
 ) {
 
@@ -58,7 +58,7 @@ fun ErrorScreen(
                 .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            Row (
+            Row(
                 modifier = Modifier
                     .wrapContentHeight()
                     .fillMaxWidth(),
@@ -75,7 +75,8 @@ fun ErrorScreen(
                 )
 
                 Text(
-                    modifier = modifier.weight(0.8f)
+                    modifier = modifier
+                        .weight(0.8f)
                         .padding(end = 15.dp),
                     text = errorMessage,
                     style = TextStyle(

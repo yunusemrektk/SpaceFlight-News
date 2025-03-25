@@ -9,7 +9,7 @@ import com.study.summary.SummaryRoute
 
 const val SUMMARY_ROUTE = "summary_screen_route"
 
-fun NavController.navigateToSummary(){
+fun NavController.navigateToSummary() {
     this.navigate(route = SUMMARY_ROUTE)
 }
 
@@ -18,7 +18,7 @@ fun NavGraphBuilder.summaryScreen(
     onNavigateToDetailScreen: (Int) -> Unit
 ) {
     composable(route = SUMMARY_ROUTE) {
-        BackHandler (true) { onBackClick() }
+        BackHandler(true) { onBackClick() }
         SummaryRoute(
             onNavigateToDetailScreen
         )

@@ -1,5 +1,6 @@
 package com.study.detail
 
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -12,6 +13,7 @@ import com.study.model.NewsDetail
 import com.study.ui.DetailItemScreen
 import com.study.ui.ErrorScreen
 import com.study.ui.LoadingScreen
+
 
 @Composable
 fun DetailRoute(
@@ -44,7 +46,7 @@ fun DetailScreen(
             is DetailScreenUIState.Detail -> {
                 DetailScreen(
                     title = detailScreenUIState.detail.title,
-                    article =  detailScreenUIState.detail.article,
+                    article = detailScreenUIState.detail.article,
                     imageUrl = detailScreenUIState.detail.image,
                     date = detailScreenUIState.detail.date,
                     isSaved = detailScreenUIState.detail.isSaved,
@@ -74,15 +76,15 @@ fun DetailScreen(
 ) {
     DetailItemScreen(
         title = title,
-        article =  article,
+        article = article,
         imageUrl = imageUrl,
         date = date,
         isSaved = isSaved,
         onBackClick = onBackClick,
-        onLikeClick = onLikeClick
+        onLikeClick = onLikeClick,
     )
 
-    if(errorMessage.isNotEmpty()) {
+    if (errorMessage.isNotEmpty()) {
         ErrorScreen(
             errorMessage = errorMessage,
             onDismiss = onBackClick
@@ -94,5 +96,8 @@ fun DetailScreen(
 @Composable
 fun PreviewDetailScreen() {
     val detailScreenUIState = DetailScreenUIState.Detail(NewsDetail(), "")
-    DetailScreen(detailScreenUIState = detailScreenUIState, onBackClick = {} , onLikeClick = {t,b -> })
+    DetailScreen(
+        detailScreenUIState = detailScreenUIState,
+        onBackClick = {},
+        onLikeClick = { t, b -> })
 }

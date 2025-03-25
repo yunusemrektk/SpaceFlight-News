@@ -8,8 +8,7 @@ import javax.inject.Inject
 
 class GetDetailRepository @Inject constructor(
     val apiRepository: ApiRepository,
-): DetailRepository
-{
+) : DetailRepository {
     override suspend fun getNewsDetail(id: Int): NewsDetail {
         return apiRepository.getDetail(id).asExternalModel()
     }

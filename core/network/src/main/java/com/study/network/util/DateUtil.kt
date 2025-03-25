@@ -25,6 +25,7 @@ fun convertDateFormat(iso8601Date: String): String {
         diffInDays > 0 && diffInDays < 7 -> {
             "$diffInDays days ago"
         }
+
         else -> {
             val formatter = SimpleDateFormat("dd:MM:yyyy", Locale.getDefault())
             formatter.format(date)

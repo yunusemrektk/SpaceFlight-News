@@ -18,7 +18,7 @@ fun App(appState: AppState, navHostController: NavHostController) {
     Scaffold(
         bottomBar = {
             SpaceFlightNavigationBar {
-                val currentState = remember { mutableStateOf(appState.currentState)  }
+                val currentState = remember { mutableStateOf(appState.currentState) }
                 appState.topLevelDestinations.forEach { destination ->
                     NavigationBarItem(
                         icon = {

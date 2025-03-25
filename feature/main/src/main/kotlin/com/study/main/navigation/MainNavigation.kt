@@ -18,7 +18,7 @@ fun NavGraphBuilder.mainScreen(
     onNavigateToSummaryScreen: () -> Unit,
 ) {
     composable(route = MAIN_ROUTE) {
-        BackHandler (true) { onBackClick() }
+        BackHandler(true) { onBackClick() }
         MainRoute(
             onNavigateToSummaryScreen = onNavigateToSummaryScreen
         )

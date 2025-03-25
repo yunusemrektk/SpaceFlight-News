@@ -51,7 +51,7 @@ fun FavoriteRoute(
         favoriteScreenUiState = favoriteScreenUiState,
         onBackClick = favoriteScreenViewModel::onBackClicked,
         onDetailClick = favoriteScreenViewModel::onDetailClicked,
-        onLikeClick =  favoriteScreenViewModel::onLikeClicked
+        onLikeClick = favoriteScreenViewModel::onLikeClicked
     )
 }
 
@@ -96,7 +96,7 @@ fun FavoriteListScreen(
     onDetailClick: (NewsDetail) -> Unit
 ) {
 
-    when(favoriteListUiState) {
+    when (favoriteListUiState) {
         is FavoriteScreenUiState.ListView -> {
             FavoritesGrid(
                 news = favoriteListUiState.likedNews,
@@ -129,7 +129,8 @@ fun FavoritesGrid(
             FavoriteList(
                 news = news,
                 onItemClick = onDetailClick,
-                searchQuery = searchQuery.value)
+                searchQuery = searchQuery.value
+            )
         }
     }
 
@@ -143,7 +144,7 @@ fun FavoriteDetail(
 ) {
     DetailItemScreen(
         title = newsDetail.title,
-        article =  newsDetail.article,
+        article = newsDetail.article,
         imageUrl = newsDetail.image,
         date = newsDetail.date,
         isSaved = true,
@@ -158,7 +159,7 @@ fun FavoriteList(
     onItemClick: (NewsDetail) -> Unit,
     searchQuery: String
 ) {
-    if(news.isEmpty()) {
+    if (news.isEmpty()) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
