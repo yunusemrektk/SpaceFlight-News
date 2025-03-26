@@ -23,8 +23,8 @@ fun NavGraphBuilder.detailScreen(
 ) {
     composable(
         route = DETAIL_ROUTE, arguments = listOf(
-        navArgument(ITEM_ID) { type = NavType.IntType }
-    )) {
+            navArgument(ITEM_ID) { type = NavType.IntType }
+        )) {
         BackHandler(true) { onBackClick() }
         DetailRoute(
             onBackClick = onBackClick

@@ -51,7 +51,7 @@ fun FavoriteRoute(
         favoriteScreenUiState = favoriteScreenUiState,
         onBackClick = favoriteScreenViewModel::onBackClicked,
         onDetailClick = favoriteScreenViewModel::onDetailClicked,
-        onLikeClick = favoriteScreenViewModel::onLikeClicked
+        onLikeClick = favoriteScreenViewModel::onRemoveFromFavoriteList
     )
 }
 

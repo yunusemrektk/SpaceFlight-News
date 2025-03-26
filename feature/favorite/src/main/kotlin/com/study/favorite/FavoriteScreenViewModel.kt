@@ -3,13 +3,12 @@ package com.study.favorite
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.study.data.repository.UserDataRepository
+import com.study.domain.GetFavoritesUseCase
 import com.study.domain.RemoveFavoriteUseCase
 import com.study.model.NewsDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -19,18 +18,14 @@ import javax.inject.Inject
 @HiltViewModel
 class FavoriteScreenViewModel @Inject constructor(
     val removeFavoriteUseCase: RemoveFavoriteUseCase,
-    val offlineUserDataRepository: UserDataRepository
+    val getFavoritesUseCase: GetFavoritesUseCase
 ) : ViewModel() {
     val favoriteScreenUiState =
         MutableStateFlow<FavoriteScreenUiState>(FavoriteScreenUiState.Loading)
 
-    init {
-        getFavorites()
-    }
-
     fun getFavorites() {
         viewModelScope.launch {
-            offlineUserDataRepository.observeAllFavorites()
+            getFavoritesUseCase.invoke()
                 .map<List<NewsDetail>, FavoriteScreenUiState>(FavoriteScreenUiState::ListView)
                 .onStart { emit(FavoriteScreenUiState.Loading) }
                 .stateIn(
@@ -38,20 +33,15 @@ class FavoriteScreenViewModel @Inject constructor(
                     started = SharingStarted.WhileSubscribed(3_000),
                     initialValue = FavoriteScreenUiState.Loading,
                 ).collect { collectResult ->
+                    Log.i("GetFavoritesUseCase", "Get Favorites UseCase result: $collectResult")
                     favoriteScreenUiState.value = collectResult
                 }
         }
     }
 
-    fun onLikeClicked(newsDetail: NewsDetail) {
+    fun onRemoveFromFavoriteList(newsDetail: NewsDetail) {
         viewModelScope.launch {
             removeFavoriteUseCase.invoke(newsDetail)
-                .catch {
-                    Log.i("FavoriteScreenViewModel", "Remove Favorite Error id: ${newsDetail.id}")
-                }
-                .collect {
-                    Log.i("FavoriteScreenViewModel", "Remove Favorite Success")
-                }
         }
     }
 

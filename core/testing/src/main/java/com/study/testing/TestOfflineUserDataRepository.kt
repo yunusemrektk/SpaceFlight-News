@@ -16,8 +16,7 @@ private val emptyUserData = UserData(
 )
 
 
-
-class TestOfflineUserDataRepository: UserDataRepository {
+class TestOfflineUserDataRepository : UserDataRepository {
     private val _userData = MutableSharedFlow<UserData>(replay = 1, onBufferOverflow = DROP_OLDEST)
 
     private val currentUserData get() = _userData.replayCache.firstOrNull() ?: emptyUserData
@@ -33,7 +32,12 @@ class TestOfflineUserDataRepository: UserDataRepository {
             val updatedDetails = currentData.newsDetail + (newsDetail.id to newsDetail)
 
             val updatedData = currentData.copy(newsDetail = updatedDetails)
-            _userData.tryEmit(currentUserData.copy(newsDetail = updatedData.newsDetail, newsSummary = updatedData.newsSummary))
+            _userData.tryEmit(
+                currentUserData.copy(
+                    newsDetail = updatedData.newsDetail,
+                    newsSummary = updatedData.newsSummary
+                )
+            )
 
         }
     }
@@ -42,7 +46,7 @@ class TestOfflineUserDataRepository: UserDataRepository {
         currentUserData.let { currentData ->
 
             var updatedDetail = currentData.newsDetail
-            if(updatedDetail.isEmpty()) {
+            if (updatedDetail.isEmpty()) {
                 updatedDetail = currentData.newsDetail + (newDetail.id to newDetail)
             }
 
@@ -55,7 +59,12 @@ class TestOfflineUserDataRepository: UserDataRepository {
             val updatedData = currentData.copy(newsDetail = updatedDetail)
 
 
-            _userData.tryEmit(currentUserData.copy(newsDetail = updatedData.newsDetail, newsSummary = updatedData.newsSummary))
+            _userData.tryEmit(
+                currentUserData.copy(
+                    newsDetail = updatedData.newsDetail,
+                    newsSummary = updatedData.newsSummary
+                )
+            )
 
         }
     }

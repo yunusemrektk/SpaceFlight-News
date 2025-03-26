@@ -24,7 +24,6 @@ fun SpaceNavHost(
         startDestination = MAIN_ROUTE
     ) {
         mainScreen(
-            onBackClick = {},
             onNavigateToSummaryScreen = {
                 navHostController.navigateToSummary()
             }

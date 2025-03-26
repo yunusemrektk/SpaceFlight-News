@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.study.data.repository.UserDataRepository
 import com.study.detail.navigation.ITEM_ID
+import com.study.domain.GetOfflineDetailUseCase
 import com.study.domain.SaveFavoriteUseCase
 import com.study.model.NewsDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailScreenViewModel @Inject constructor(
     val saveFavoriteUseCase: SaveFavoriteUseCase,
-    val offlineUserDataRepository: UserDataRepository,
+    val getOfflineDetailUseCase: GetOfflineDetailUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val detailScreenUiState = MutableStateFlow<DetailScreenUIState>(DetailScreenUIState.Loading)
@@ -29,16 +29,14 @@ class DetailScreenViewModel @Inject constructor(
 
     fun initValues() {
         viewModelScope.launch {
-            Log.d("DetailScreenViewModel", "Get Detail Item Id: ${itemId}")
-            offlineUserDataRepository.observeDetail(itemId)
-                .catch {
-                    Log.e("DetailScreenViewModel", "Get Detail Error: ${it.message}")
+            getOfflineDetailUseCase.invoke(itemId).collect { item ->
+                if (item == null) {
                     detailScreenUiState.value =
                         DetailScreenUIState.Detail(errorMessage = "Can not get the details of the news")
-                }
-                .collect { item ->
+                } else {
                     detailScreenUiState.value = DetailScreenUIState.Detail(item)
                 }
+            }
         }
     }
 

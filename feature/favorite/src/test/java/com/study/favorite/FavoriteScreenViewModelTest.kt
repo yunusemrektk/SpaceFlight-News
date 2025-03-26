@@ -1,5 +1,6 @@
 package com.study.favorite
 
+import com.study.domain.GetFavoritesUseCase
 import com.study.domain.RemoveFavoriteUseCase
 import com.study.favorite.FavoriteScreenUiState.ListView
 import com.study.favorite.FavoriteScreenUiState.Loading
@@ -29,9 +30,11 @@ class FavoriteScreenViewModelTest {
 
     private val offlineUserDataRepository = TestOfflineUserDataRepository()
     private val removeFavoriteUseCase = RemoveFavoriteUseCase(offlineUserDataRepository)
+    private val getFavoritesUseCase = GetFavoritesUseCase(offlineUserDataRepository)
     private lateinit var viewModel: FavoriteScreenViewModel
 
     private val testDispatcher = StandardTestDispatcher()
+
     @get:Rule
     val dispatcherRule = MainDispatcherRule()
 
@@ -46,8 +49,8 @@ class FavoriteScreenViewModelTest {
     fun setup() {
         viewModel = FavoriteScreenViewModel(
             removeFavoriteUseCase = removeFavoriteUseCase,
-            offlineUserDataRepository = offlineUserDataRepository
-            )
+            getFavoritesUseCase = getFavoritesUseCase
+        )
     }
 
     @Test
@@ -58,8 +61,8 @@ class FavoriteScreenViewModelTest {
     @Test
     fun saveFavorites() = runTest {
         val collectJob = backgroundScope.launch(UnconfinedTestDispatcher()) {
-            viewModel.favoriteScreenUiState.collect{
-                if (it is ListView){
+            viewModel.favoriteScreenUiState.collect {
+                if (it is ListView) {
                     assertEquals(1, it.likedNews.size)
                 }
             }
@@ -77,8 +80,8 @@ class FavoriteScreenViewModelTest {
             offlineUserDataRepository.saveDetails(exampleDetail)
             offlineUserDataRepository.saveFavorites(exampleDetail, true)
             offlineUserDataRepository.saveFavorites(exampleDetail, false)
-            viewModel.favoriteScreenUiState.collect{
-                if (it is ListView){
+            viewModel.favoriteScreenUiState.collect {
+                if (it is ListView) {
                     assertEquals(0, it.likedNews.size)
                 }
             }

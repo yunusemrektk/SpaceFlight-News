@@ -1,6 +1,7 @@
 package com.study.network.di
 
 import com.study.network.ApiService
+import com.study.network.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,8 +11,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-
-private const val BASE_URL = "https://api.spaceflightnewsapi.net/v4/" // Replace with your base
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -31,7 +30,7 @@ class NetworkModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create()) // Use Gson
             .build()

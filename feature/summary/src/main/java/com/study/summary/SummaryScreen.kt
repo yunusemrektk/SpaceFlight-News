@@ -64,7 +64,6 @@ fun SummaryScreen(
     onRefresh: () -> Unit,
     onItemClicked: (Int) -> Unit
 ) {
-
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -127,9 +126,10 @@ fun SummaryList(
     val filteredNews = news.filter {
         it.title.isNotEmpty() && it.title.lowercase().contains(searchQuery.lowercase())
     }
+
     PullToRefreshBox(
         isRefreshing = isRefreshing,
-        onRefresh = onRefresh,
+        onRefresh = { onRefresh() },
         modifier = modifier
     ) {
         LazyColumn(

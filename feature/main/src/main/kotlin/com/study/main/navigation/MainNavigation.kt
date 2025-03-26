@@ -1,6 +1,5 @@
 package com.study.main.navigation
 
-import androidx.activity.compose.BackHandler
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -14,11 +13,9 @@ fun NavController.navigateToMain(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.mainScreen(
-    onBackClick: () -> Unit,
     onNavigateToSummaryScreen: () -> Unit,
 ) {
     composable(route = MAIN_ROUTE) {
-        BackHandler(true) { onBackClick() }
         MainRoute(
             onNavigateToSummaryScreen = onNavigateToSummaryScreen
         )

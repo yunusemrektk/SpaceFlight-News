@@ -55,7 +55,7 @@ class UserPreferencesDataSource @Inject constructor(
 
     fun saveDetails(newsDetails: NewsDetail) {
         _userData.update { currentData ->
-            if(currentData.newsDetail[newsDetails.id] != null) {
+            if (currentData.newsDetail[newsDetails.id] != null) {
                 return
             }
 
@@ -70,7 +70,7 @@ class UserPreferencesDataSource @Inject constructor(
     fun saveFavorites(newDetail: NewsDetail, isLiked: Boolean) {
         _userData.update { currentData ->
             var updatedDetail = currentData.newsDetail
-            if(updatedDetail.isEmpty()) {
+            if (updatedDetail.isEmpty()) {
                 updatedDetail = currentData.newsDetail + (newDetail.id to newDetail)
             }
 
