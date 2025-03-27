@@ -260,14 +260,21 @@ fun NewsItemDateComponent(
 }
 
 class SummaryScreenParameterProvider : PreviewParameterProvider<SummaryScreenUiState> {
+    val new1 = NewsSummary(
+        id = 0,
+        title = "Not Just for Engineers: Broadening the Space Pipeline",
+        summary = "In this week's episode of Space Minds, Sara Alvarado, Executive Director for the Students for the Exploration and Development of Space, known as SEDS, sits down with host David Ariosto.\\nThe post Not Just for Engineers: Broadening the Space Pipeline appeared first on SpaceNews.",
+        date = "today"
+    )
+
 
     private fun provideNew(): List<NewsSummary> {
-        val new1 = NewsSummary(0, title = "Title 1", "Article 1", "1 Hour a go")
-        val new2 = NewsSummary(0, title = "Title 2", "Article 2", "2 Hour a go")
         return listOf(
-            new1, new2
+            new1,
+            new1
         )
     }
+
 
     override val values: Sequence<SummaryScreenUiState> = sequenceOf(
         SummaryScreenUiState.Summary(errorMessage = "Can not update the news", isRefreshing = true),

@@ -19,6 +19,5 @@ fun NavGraphBuilder.favoriteScreen(
     composable(route = FAVORITE_ROUTE) {
         BackHandler(true) { onBackClick() }
         FavoriteRoute()
-
     }
 }

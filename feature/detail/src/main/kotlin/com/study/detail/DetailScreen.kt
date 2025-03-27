@@ -1,12 +1,13 @@
 package com.study.detail
 
-
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.study.model.NewsDetail
@@ -92,12 +93,31 @@ fun DetailScreen(
     }
 }
 
+class DetailParameterProvider : PreviewParameterProvider<DetailScreenUIState> {
+    val new1 = NewsDetail(
+        id = 0,
+        title = "Not Just for Engineers: Broadening the Space Pipeline",
+        article = "nIn this week's episode of Space Minds, Sara Alvarado, Executive Director for the Students for the Exploration and Development of Space, known as SEDS, sits down with host David Ariosto.\\nThe post Not Just for Engineers: Broadening the Space Pipeline appeared first on SpaceNews.",
+        image = "https://i0.wp.com/spacenews.com/wp-content/uploads/2025/03/2000x1500-Sara-Alvarado.png?fit=1024%2C768&quality=80&ssl=1",
+        date = "today",
+        isSaved = true
+    )
+
+
+    override val values: Sequence<DetailScreenUIState> = sequenceOf(
+        DetailScreenUIState.Detail(new1)
+    )
+
+}
+
 @Preview
 @Composable
-fun PreviewDetailScreen() {
-    val detailScreenUIState = DetailScreenUIState.Detail(NewsDetail(), "")
+fun PreviewFavoriteScreen(
+    @PreviewParameter(DetailParameterProvider::class) parameter: DetailScreenUIState
+) {
     DetailScreen(
-        detailScreenUIState = detailScreenUIState,
+        detailScreenUIState = parameter,
         onBackClick = {},
-        onLikeClick = { t, b -> })
+        onLikeClick = { id, isLiked -> {} }
+    )
 }

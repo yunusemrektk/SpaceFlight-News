@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -31,12 +33,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import com.study.ui.DetailParameterProvider.DetailItemParameter
 
 @Composable
 fun DetailItemScreen(
@@ -60,19 +65,22 @@ fun DetailItemScreen(
                 .navigationBarsPadding()
                 .systemBarsPadding()
         ) {
-            Column {
-                NewsDetailTitleComponent(title = title)
-                NewsDetailArticleComponent(
-                    modifier = Modifier.weight(1f),
-                    summary = article,
-                    imageUrl
-                )
-                NewsDetailDateComponent(
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+            ) {
+                NewsDetailTopComponent(
                     date = date,
                     saved = isSaved,
                     onBackClick = onBackClick,
                     onShareClick = { onShareClicked(context, title, article) },
                     onLikeClicked = onLikeClick
+                )
+                ImageItem(imageUrl = imageUrl)
+                NewsDetailTitleComponent(title = title)
+                NewsDetailArticleComponent(
+                    summary = article,
+                    imageUrl = imageUrl
                 )
             }
         }
@@ -92,12 +100,42 @@ fun onShareClicked(context: Context, title: String, article: String) {
 }
 
 @Composable
+fun ImageLoadingError(textError: String = "") {
+    Column(
+        modifier = Modifier
+            .size(50.dp)
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Icon(
+            modifier = Modifier
+                .size(60.dp),
+            imageVector = Icons.Default.Warning,
+            contentDescription = "",
+            tint = Color.Yellow
+        )
+
+        Text(
+            text = textError,
+            style = TextStyle(
+                fontSize = 16.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            ),
+            fontFamily = FontFamily.Default,
+            textAlign = TextAlign.Center
+        )
+    }
+
+}
+
+@Composable
 fun NewsDetailTitleComponent(
-    modifier: Modifier = Modifier,
     title: String
 ) {
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(top = 10.dp, start = 20.dp, end = 20.dp),
         contentAlignment = Alignment.CenterStart
@@ -116,44 +154,30 @@ fun NewsDetailTitleComponent(
 
 @Composable
 fun NewsDetailArticleComponent(
-    modifier: Modifier = Modifier,
     summary: String,
     imageUrl: String
 ) {
 
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp),
         contentAlignment = Alignment.TopCenter
     ) {
-        Column(
-            modifier = modifier
-                .verticalScroll(rememberScrollState())
-        ) {
-            Text(
-                text = summary,
-                style = TextStyle(fontSize = 18.sp, color = Color.LightGray),
-                fontWeight = FontWeight.Normal
+        Text(
+            text = summary,
+            style = TextStyle(fontSize = 18.sp, color = Color.LightGray),
+            fontWeight = FontWeight.Normal,
+
             )
-            if (imageUrl.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(20.dp))
-                AsyncImage(
-                    model = imageUrl,
-                    contentDescription = "image_desc",
-                    modifier = Modifier
-                        .height(200.dp)
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                )
-            }
+        if (imageUrl.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(20.dp))
         }
     }
-
 }
 
 @Composable
-fun NewsDetailDateComponent(
+fun NewsDetailTopComponent(
     modifier: Modifier = Modifier,
     date: String,
     saved: Boolean,
@@ -164,7 +188,7 @@ fun NewsDetailDateComponent(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(end = 15.dp, bottom = 10.dp),
+            .padding(end = 15.dp, top = 10.dp),
         contentAlignment = Alignment.Center
     ) {
         Row {
@@ -207,15 +231,50 @@ fun NewsDetailDateComponent(
     }
 }
 
+
+class DetailParameterProvider : PreviewParameterProvider<DetailItemParameter> {
+
+    data class DetailItemParameter(
+        val id: Int = 0,
+        val title: String,
+        val article: String,
+        val image: String,
+        val date: String,
+        val isSaved: Boolean = false
+    )
+
+    val new1 = DetailItemParameter(
+        id = 0,
+        title = "Not Just for Engineers: Broadening the Space Pipeline",
+        article = "In this week's episode of Space Minds, Sara Alvarado, Executive Director for the Students for the Exploration and Development of Space, known as SEDS, sits down with host David Ariosto.\\nThe post Not Just for Engineers: Broadening the Space Pipeline appeared first on SpaceNews.",
+        image = "https://i0.wp.com/spacenews.com/wp-content/uploads/2025/03/2000x1500-Sara-Alvarado.png?fit=1024%2C768&quality=80&ssl=1",
+        date = "today",
+        isSaved = true
+    )
+
+
+    override val values: Sequence<DetailItemParameter> = sequenceOf(
+        new1,
+        new1
+    )
+
+}
+
 @Preview
+@Preview(
+    showSystemUi = true,
+    device = "spec:width=411dp,height=891dp,dpi=420,isRound=false,chinSize=0dp,orientation=landscape"
+)
 @Composable
-fun PreviewDetails() {
+fun PreviewFavoriteScreen(
+    @PreviewParameter(DetailParameterProvider::class) parameter: DetailItemParameter
+) {
     DetailItemScreen(
-        "title",
-        "aricle",
-        "imageUrl",
-        "date",
-        false,
+        parameter.title,
+        parameter.article,
+        parameter.image,
+        parameter.date,
+        true,
         onBackClick = {},
         onLikeClick = {},
     )

@@ -41,7 +41,9 @@ class FavoriteScreenViewModel @Inject constructor(
 
     fun onRemoveFromFavoriteList(newsDetail: NewsDetail) {
         viewModelScope.launch {
-            removeFavoriteUseCase.invoke(newsDetail)
+            removeFavoriteUseCase.invoke(newsDetail).collect {
+                Log.i("GetFavoritesUseCase", "Removed From Favorites: $newsDetail.id")
+            }
         }
     }
 

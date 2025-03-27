@@ -10,8 +10,6 @@ class RemoveFavoriteUseCase @Inject constructor(
     val offlineUserDataRepository: UserDataRepository
 ) {
     fun invoke(id: NewsDetail): Flow<Any> = flow {
-        offlineUserDataRepository.saveFavorites(id, false)
+        emit(offlineUserDataRepository.saveFavorites(id, false))
     }
-
-
 }

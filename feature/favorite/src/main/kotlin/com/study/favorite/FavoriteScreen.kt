@@ -26,6 +26,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -222,4 +225,40 @@ fun FavoriteItem(
             }
         }
     }
+}
+
+class FavoriteParameterProvider : PreviewParameterProvider<FavoriteScreenUiState> {
+    val new1 = NewsDetail(
+        id = 0,
+        title = "Not Just for Engineers: Broadening the Space Pipeline",
+        article = "nIn this week's episode of Space Minds, Sara Alvarado, Executive Director for the Students for the Exploration and Development of Space, known as SEDS, sits down with host David Ariosto.\\nThe post Not Just for Engineers: Broadening the Space Pipeline appeared first on SpaceNews.",
+        image = "https://i0.wp.com/spacenews.com/wp-content/uploads/2025/03/2000x1500-Sara-Alvarado.png?fit=1024%2C768&quality=80&ssl=1",
+        date = "today",
+        isSaved = true
+    )
+
+
+    private fun providePreviewListItem(): List<NewsDetail> {
+        val list = ArrayList<NewsDetail>()
+        list.add(new1)
+        return list
+    }
+
+    override val values: Sequence<FavoriteScreenUiState> = sequenceOf(
+        FavoriteScreenUiState.ListView(likedNews = providePreviewListItem()),
+        FavoriteScreenUiState.Detail(new1),
+    )
+
+}
+
+@Preview
+@Preview(
+    showSystemUi = true,
+    device = "spec:width=411dp,height=891dp,dpi=420,isRound=false,chinSize=0dp,orientation=landscape"
+)
+@Composable
+fun PreviewFavoriteScreen(
+    @PreviewParameter(FavoriteParameterProvider::class) parameter: FavoriteScreenUiState
+) {
+    FavoriteScreen(parameter, onBackClick = {}, onDetailClick = {}, onLikeClick = {})
 }
