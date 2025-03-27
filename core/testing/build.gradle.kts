@@ -35,8 +35,7 @@ android {
 dependencies {
     api(project(":core:data"))
     api(project(":core:model"))
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.1")
-
+    api(libs.kotlinx.coroutines.test)
     api(libs.junit)
 
     implementation(libs.androidx.core.ktx)

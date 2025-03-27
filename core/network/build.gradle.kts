@@ -39,32 +39,26 @@ android {
 }
 
 dependencies {
+    // Modules
     implementation(project(":core:model"))
-    //Dependency Injection
+
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.48.1")
-    debugImplementation(libs.ui.tooling)
-    kapt("com.google.dagger:hilt-compiler:2.48.1")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
-    implementation("androidx.navigation:navigation-compose:2.7.6")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    androidTestImplementation(libs.hilt.android.testing)
+    kaptAndroidTest(libs.hilt.compiler)
+    testImplementation(libs.hilt.android.testing)
+    kaptTest(libs.hilt.compiler)
 
-    // For instrumented tests
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.48.1")
-    kaptAndroidTest("com.google.dagger:hilt-compiler:2.48.1")
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 
-    // For local unit tests
-    testImplementation("com.google.dagger:hilt-android-testing:2.48.1")
-    kaptTest("com.google.dagger:hilt-compiler:2.48.1")
-
-    implementation("com.squareup.retrofit2:retrofit:2.9.0") // Use the latest version
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0") // Use the latest version
-
-    // OkHttp (Retrofit uses it, but it is good to have it to use the logging interceptor)
-    implementation("com.squareup.okhttp3:okhttp:4.11.0") // Use the latest version
-    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0") // Use the latest version
+    // OkHttp
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 
     implementation(libs.androidx.core.ktx)
-
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
